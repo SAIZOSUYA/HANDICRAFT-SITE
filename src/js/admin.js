@@ -1,24 +1,86 @@
 /* ==========================================================================
-   BARAHI HANDICRAFT — Admin Management Panel & Image Slot Manager
+   BARAHI HANDICRAFT — Admin Authentication & Management Panel
    ========================================================================== */
 
+// Configurable Admin Credentials
+const ADMIN_USERNAME = 'admin';
+const ADMIN_PASSWORD = 'password123';
+
 document.addEventListener('DOMContentLoaded', () => {
+  initAdminAuth();
   initAdminModal();
   initFormUploadHandlers();
 });
 
-function initAdminModal() {
+function initAdminAuth() {
   const btnOpenAdmin = document.getElementById('btn-open-admin');
+  const btnCloseLogin = document.getElementById('btn-close-login');
+  const loginOverlay = document.getElementById('admin-login-modal');
+  const loginForm = document.getElementById('admin-login-form');
+  const adminOverlay = document.getElementById('admin-modal-overlay');
+  const btnLogoutAdmin = document.getElementById('btn-logout-admin');
+
+  if (btnOpenAdmin) {
+    btnOpenAdmin.addEventListener('click', () => {
+      if (isAdminAuthenticated()) {
+        adminOverlay.classList.add('active');
+        renderAdminInventoryTable();
+      } else {
+        loginOverlay.classList.add('active');
+      }
+    });
+  }
+
+  if (btnCloseLogin && loginOverlay) {
+    btnCloseLogin.addEventListener('click', () => {
+      loginOverlay.classList.remove('active');
+    });
+  }
+
+  if (loginOverlay) {
+    loginOverlay.addEventListener('click', (e) => {
+      if (e.target === loginOverlay) {
+        loginOverlay.classList.remove('active');
+      }
+    });
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('admin-login-user').value.trim();
+      const pass = document.getElementById('admin-login-pass').value.trim();
+
+      if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
+        sessionStorage.setItem('barahi_admin_auth', 'true');
+        loginOverlay.classList.remove('active');
+        adminOverlay.classList.add('active');
+        renderAdminInventoryTable();
+        showToast('Successfully authenticated as Admin!');
+        loginForm.reset();
+      } else {
+        alert('Invalid Admin Username or Password. (Default Username: admin, Password: password123)');
+      }
+    });
+  }
+
+  if (btnLogoutAdmin) {
+    btnLogoutAdmin.addEventListener('click', () => {
+      sessionStorage.removeItem('barahi_admin_auth');
+      adminOverlay.classList.remove('active');
+      showToast('Logged out of Admin Control Panel.');
+    });
+  }
+}
+
+function isAdminAuthenticated() {
+  return sessionStorage.getItem('barahi_admin_auth') === 'true';
+}
+
+function initAdminModal() {
   const btnCloseAdmin = document.getElementById('btn-close-admin');
   const adminOverlay = document.getElementById('admin-modal-overlay');
   const adminForm = document.getElementById('admin-add-product-form');
-
-  if (btnOpenAdmin && adminOverlay) {
-    btnOpenAdmin.addEventListener('click', () => {
-      adminOverlay.classList.add('active');
-      renderAdminInventoryTable();
-    });
-  }
 
   if (btnCloseAdmin && adminOverlay) {
     btnCloseAdmin.addEventListener('click', () => {

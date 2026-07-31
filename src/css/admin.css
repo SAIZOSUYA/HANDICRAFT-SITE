@@ -41,6 +41,10 @@
   animation: modalScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.login-modal-content {
+  max-width: 420px;
+}
+
 @keyframes modalScale {
   from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -425,46 +429,4 @@ textarea.form-control {
   font-size: 0.85rem;
   border: 1px solid var(--border-light);
   border-radius: 4px;
-}
-
-.drawer-footer {
-  padding: 1.5rem;
-  background: var(--bg-surface-elevated);
-  border-top: 1px solid var(--border-light);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Container Load Visualizer Bar */
-.container-calc-card {
-  background: var(--bg-dark);
-  color: var(--text-light);
-  border-radius: var(--radius-md);
-  padding: 1rem;
-  border: 1px solid var(--border-gold);
-}
-
-.calc-title {
-  font-size: 0.8rem;
-  color: var(--text-gold);
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.progress-bar-track {
-  height: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent-gold), var(--accent-teak));
-  width: 0%;
-  transition: width 0.3s ease;
 }
