@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "barahi-handicraft-site",
+  "name": "handicraft-site",
   "cleanUrls": true,
   "headers": [
     {
@@ -11,8 +11,8 @@
           "value": "nosniff"
         },
         {
-          "key": "X-Frame-Options",
-          "value": "DENY"
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
         }
       ]
     }
