@@ -1,5 +1,5 @@
 /* ==========================================================================
-   BARAHI HANDICRAFT — Admin Authentication & Google Sign-In Integration
+   BARAHI HANDICRAFT — Google Entrance Gate & Admin Authentication
    Client ID: 831474336400-de4pm9gpvfhokqa76mkj0kiodm49kjsl.apps.googleusercontent.com
    ========================================================================== */
 
@@ -8,6 +8,7 @@ const STORAGE_KEY_ADMIN_USER = 'barahi_admin_user';
 const STORAGE_KEY_ADMIN_PASS = 'barahi_admin_pass';
 const STORAGE_KEY_ADMIN_AUTH = 'barahi_admin_auth';
 const STORAGE_KEY_GOOGLE_PROFILE = 'barahi_google_profile';
+const STORAGE_KEY_USER_LOGGED_IN = 'barahi_user_logged_in';
 
 function getAdminUsername() {
   return localStorage.getItem(STORAGE_KEY_ADMIN_USER) || 'admin';
@@ -18,9 +19,7 @@ function getAdminPassword() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Ensure all modals start closed on initial page load (Landing Page access only)
-  closeAllModalsOnLoad();
-  
+  initGoogleEntranceGate();
   initAdminAuth();
   initAdminModal();
   initFormUploadHandlers();
@@ -28,12 +27,47 @@ document.addEventListener('DOMContentLoaded', () => {
   initGoogleAuth();
 });
 
-function closeAllModalsOnLoad() {
-  const modals = document.querySelectorAll('.modal-overlay');
-  modals.forEach(m => m.classList.remove('active'));
+// Entrance Gate popup check on initial site load
+function initGoogleEntranceGate() {
+  const gateModal = document.getElementById('google-user-gate-modal');
+  const btnGuest = document.getElementById('btn-continue-guest');
 
-  const drawer = document.getElementById('rfq-drawer');
-  if (drawer) drawer.classList.remove('active');
+  // Check if user is already logged in or dismissed gate this session
+  const isUserLoggedIn = sessionStorage.getItem(STORAGE_KEY_USER_LOGGED_IN);
+  const userProfile = JSON.parse(sessionStorage.getItem(STORAGE_KEY_GOOGLE_PROFILE) || '{}');
+
+  if (!isUserLoggedIn && gateModal) {
+    // Show Google Entrance Gate Popup on load
+    setTimeout(() => {
+      gateModal.classList.add('active');
+    }, 400);
+  } else if (userProfile.name) {
+    updateTopBarUserBadge(userProfile);
+  }
+
+  if (btnGuest && gateModal) {
+    btnGuest.addEventListener('click', () => {
+      sessionStorage.setItem(STORAGE_KEY_USER_LOGGED_IN, 'guest');
+      gateModal.classList.remove('active');
+      showToast('Welcome to Barahi Handicraft Studio!');
+    });
+  }
+}
+
+function updateTopBarUserBadge(profile) {
+  const container = document.getElementById('top-bar-user-info');
+  if (!container) return;
+
+  if (profile && profile.name) {
+    const avatarHtml = profile.picture
+      ? `<img src="${profile.picture}" style="width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; margin-right: 6px;" />`
+      : '👤 ';
+    container.innerHTML = `
+      <span style="font-size: 0.8rem; color: var(--text-gold);">
+        ${avatarHtml}Welcome, <strong>${profile.name}</strong>
+      </span>
+    `;
+  }
 }
 
 function initGoogleAuth() {
@@ -64,18 +98,22 @@ function initGoogleAuth() {
         sub: payload.sub
       };
 
+      // Mark user as logged in & store profile
+      sessionStorage.setItem(STORAGE_KEY_USER_LOGGED_IN, 'true');
       sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
       sessionStorage.setItem(STORAGE_KEY_GOOGLE_PROFILE, JSON.stringify(userProfile));
 
+      // Close Entrance Gate and Login Modals
+      const gateModal = document.getElementById('google-user-gate-modal');
       const loginOverlay = document.getElementById('admin-login-modal');
       const adminOverlay = document.getElementById('admin-modal-overlay');
 
+      if (gateModal) gateModal.classList.remove('active');
       if (loginOverlay) loginOverlay.classList.remove('active');
-      if (adminOverlay) adminOverlay.classList.add('active');
 
-      renderAdminInventoryTable();
+      updateTopBarUserBadge(userProfile);
       updateAdminUserBadge(userProfile);
-      showToast(`Welcome ${userProfile.name}! Signed in via Google.`);
+      showToast(`Welcome ${userProfile.name}! Access Granted.`);
     } catch (e) {
       console.error('Failed to parse Google JWT Token', e);
       alert('Failed to process Google authentication.');
@@ -303,7 +341,6 @@ function initAdminModal() {
   }
 }
 
-// Temporary storage for image slots in the active form
 const currentFormImages = {
   front: '',
   detail: '',
@@ -428,7 +465,6 @@ function handleAdminFormSubmit() {
     showToast('New product added to Barahi Catalog!');
   }
 
-  // Reset form
   form.reset();
   currentFormImages.front = '';
   currentFormImages.detail = '';
@@ -438,7 +474,6 @@ function handleAdminFormSubmit() {
   resetSlotPreview(document.getElementById('preview-slot-detail'), 'detail');
   resetSlotPreview(document.getElementById('preview-slot-dimension'), 'dimension');
 
-  // Re-render UI
   renderAdminInventoryTable();
   if (window.renderStorefrontCatalog) {
     window.renderStorefrontCatalog();
