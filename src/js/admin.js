@@ -9,7 +9,6 @@ const STORAGE_KEY_ADMIN_PASS = 'barahi_admin_pass';
 const STORAGE_KEY_ADMIN_AUTH = 'barahi_admin_auth';
 const STORAGE_KEY_GOOGLE_PROFILE = 'barahi_google_profile';
 
-// Helper to get active credentials
 function getAdminUsername() {
   return localStorage.getItem(STORAGE_KEY_ADMIN_USER) || 'admin';
 }
@@ -27,7 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initGoogleAuth() {
-  // Global Google Sign-In callback
+  // Initialize Google Identity Services
+  if (window.google && window.google.accounts && window.google.accounts.id) {
+    try {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleSignInCallback,
+        auto_select: false
+      });
+    } catch (e) {
+      console.error('Google Auth Init Error', e);
+    }
+  }
+
+  // Global callback for Google Sign-In JWT response
   window.handleGoogleSignInCallback = function(response) {
     if (!response || !response.credential) {
       alert('Google Sign-In failed. Please try again.');
@@ -43,11 +55,9 @@ function initGoogleAuth() {
         sub: payload.sub
       };
 
-      // Authenticate session
       sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
       sessionStorage.setItem(STORAGE_KEY_GOOGLE_PROFILE, JSON.stringify(userProfile));
 
-      // Close login modal and open Admin Panel
       const loginOverlay = document.getElementById('admin-login-modal');
       const adminOverlay = document.getElementById('admin-modal-overlay');
 
@@ -62,9 +72,32 @@ function initGoogleAuth() {
       alert('Failed to process Google authentication.');
     }
   };
+
+  // Explicit Google Popup Sign-in trigger button handler
+  window.triggerGooglePopupSignin = function() {
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: window.handleGoogleSignInCallback
+      });
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // If One Tap is skipped, trigger popup window
+          openGoogleOAuthPopupWindow();
+        }
+      });
+    } else {
+      openGoogleOAuthPopupWindow();
+    }
+  };
 }
 
-// Utility to parse base64 JWT payload from Google Identity SDK
+function openGoogleOAuthPopupWindow() {
+  const redirectUri = encodeURIComponent(window.location.origin);
+  const popupUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=email%20profile`;
+  window.open(popupUrl, 'GoogleSignInPopup', 'width=500,height=600,scrollbars=yes');
+}
+
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
