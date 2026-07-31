@@ -198,10 +198,20 @@ h1, h2, h3, h4, .brand-title {
   border: 1px solid var(--border-light);
   color: var(--text-primary);
   font-size: 1.4rem;
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   line-height: 1;
+}
+
+.header-mobile-right {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-only-admin-link {
+  display: none;
 }
 
 /* Header Action Buttons */
@@ -670,22 +680,32 @@ h1, h2, h3, h4, .brand-title {
 }
 
 /* ==========================================================================
-   ADVANCED MOBILE & RESPONSIVE BREAKPOINTS (Mobile-First Optimization)
+   ADVANCED MOBILE & RESPONSIVE BREAKPOINTS (Fix Header Overlap)
    ========================================================================== */
 
-@media (max-width: 960px) {
+@media (max-width: 840px) {
   .top-bar {
-    flex-direction: column;
-    text-align: center;
-    gap: 6px;
     padding: 0.4rem 1rem;
+    font-size: 0.75rem;
   }
 
   .main-header {
     padding: 0.75rem 1rem;
   }
 
+  .header-mobile-right {
+    display: flex;
+  }
+
   .mobile-menu-btn {
+    display: block;
+  }
+
+  .desktop-only-actions {
+    display: none !important;
+  }
+
+  .mobile-only-admin-link {
     display: block;
   }
 
@@ -716,7 +736,7 @@ h1, h2, h3, h4, .brand-title {
   }
 
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
   }
 
   .filter-bar {
@@ -749,8 +769,16 @@ h1, h2, h3, h4, .brand-title {
 }
 
 @media (max-width: 580px) {
-  .top-bar-notice {
-    font-size: 0.72rem;
+  .top-bar {
+    flex-direction: column;
+    text-align: center;
+    gap: 4px;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .top-bar-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .main-header {
@@ -765,15 +793,6 @@ h1, h2, h3, h4, .brand-title {
     width: 32px;
     height: 32px;
     font-size: 1.1rem;
-  }
-
-  .header-actions {
-    gap: 6px;
-  }
-
-  .btn-admin, .btn-rfq {
-    padding: 0.4rem 0.65rem;
-    font-size: 0.72rem;
   }
 
   .hero-title {

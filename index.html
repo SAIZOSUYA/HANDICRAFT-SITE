@@ -19,7 +19,7 @@
     <div class="top-bar-notice">
       <span>✨ <strong>Barahi Handicraft</strong> — Direct Artisan Studio</span>
     </div>
-    <div class="top-bar-actions" style="display: flex; align-items: center; gap: 15px;">
+    <div class="top-bar-actions">
       <div id="top-bar-user-info"></div>
 
       <div>
@@ -44,17 +44,36 @@
       </div>
     </div>
 
-    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+    <!-- Mobile Header Right Actions (Basket + Hamburger Menu) -->
+    <div class="header-mobile-right">
+      <button class="btn-rfq" onclick="document.getElementById('btn-open-rfq').click()" title="Inquiry Basket">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+        </svg>
+        <span class="rfq-badge" id="mobile-rfq-cart-count">0</span>
+      </button>
+
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+        ☰
+      </button>
+    </div>
 
     <nav>
       <ul class="nav-links">
         <li><a href="#hero" class="active">Home</a></li>
         <li><a href="#catalog">Craft Catalog</a></li>
         <li><a href="#custom-studio">Custom Orders</a></li>
+        <li class="mobile-only-admin-link">
+          <button class="btn-admin" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="document.getElementById('btn-open-admin').click()">
+            🔑 Admin Control Panel
+          </button>
+        </li>
       </ul>
     </nav>
 
-    <div class="header-actions">
+    <!-- Desktop Header Action Buttons -->
+    <div class="header-actions desktop-only-actions">
       <button class="btn-admin" id="btn-open-admin">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="7" height="7"></rect>
