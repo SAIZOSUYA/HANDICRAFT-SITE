@@ -32,12 +32,10 @@ function initGoogleEntranceGate() {
   const gateModal = document.getElementById('google-user-gate-modal');
   const btnGuest = document.getElementById('btn-continue-guest');
 
-  // Check if user is already logged in or dismissed gate this session
   const isUserLoggedIn = sessionStorage.getItem(STORAGE_KEY_USER_LOGGED_IN);
   const userProfile = JSON.parse(sessionStorage.getItem(STORAGE_KEY_GOOGLE_PROFILE) || '{}');
 
   if (!isUserLoggedIn && gateModal) {
-    // Show Google Entrance Gate Popup on load
     setTimeout(() => {
       gateModal.classList.add('active');
     }, 400);
@@ -71,18 +69,6 @@ function updateTopBarUserBadge(profile) {
 }
 
 function initGoogleAuth() {
-  if (window.google && window.google.accounts && window.google.accounts.id) {
-    try {
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleGoogleSignInCallback,
-        auto_select: false
-      });
-    } catch (e) {
-      console.error('Google Auth Init Error', e);
-    }
-  }
-
   window.handleGoogleSignInCallback = function(response) {
     if (!response || !response.credential) {
       alert('Google Sign-In failed. Please try again.');
@@ -98,15 +84,12 @@ function initGoogleAuth() {
         sub: payload.sub
       };
 
-      // Mark user as logged in & store profile
       sessionStorage.setItem(STORAGE_KEY_USER_LOGGED_IN, 'true');
       sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
       sessionStorage.setItem(STORAGE_KEY_GOOGLE_PROFILE, JSON.stringify(userProfile));
 
-      // Close Entrance Gate and Login Modals
       const gateModal = document.getElementById('google-user-gate-modal');
       const loginOverlay = document.getElementById('admin-login-modal');
-      const adminOverlay = document.getElementById('admin-modal-overlay');
 
       if (gateModal) gateModal.classList.remove('active');
       if (loginOverlay) loginOverlay.classList.remove('active');
@@ -120,27 +103,59 @@ function initGoogleAuth() {
     }
   };
 
+  // Wait for Google SDK to load, then render GSI buttons cleanly
+  const checkGoogleSdk = setInterval(() => {
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      clearInterval(checkGoogleSdk);
+      try {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: window.handleGoogleSignInCallback,
+          auto_select: false,
+          cancel_on_tap_outside: false
+        });
+
+        // Render GSI button inside Entrance Gate container if present
+        const gateBtnContainer = document.getElementById('g_gate_signin_btn');
+        if (gateBtnContainer) {
+          google.accounts.id.renderButton(gateBtnContainer, {
+            type: 'standard',
+            theme: 'filled_black',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'rectangular',
+            logo_alignment: 'left',
+            width: 320
+          });
+        }
+
+        // Render GSI button inside Admin Login container if present
+        const adminBtnContainer = document.getElementById('g_admin_signin_btn');
+        if (adminBtnContainer) {
+          google.accounts.id.renderButton(adminBtnContainer, {
+            type: 'standard',
+            theme: 'filled_black',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'rectangular',
+            logo_alignment: 'left',
+            width: 320
+          });
+        }
+
+        // Trigger One-Tap prompt automatically
+        google.accounts.id.prompt();
+      } catch (err) {
+        console.warn('GSI Init Warning', err);
+      }
+    }
+  }, 300);
+
   window.triggerGooglePopupSignin = function() {
     if (window.google && window.google.accounts && window.google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: window.handleGoogleSignInCallback
-      });
-      google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          openGoogleOAuthPopupWindow();
-        }
-      });
-    } else {
-      openGoogleOAuthPopupWindow();
+      google.accounts.id.prompt();
     }
   };
-}
-
-function openGoogleOAuthPopupWindow() {
-  const redirectUri = encodeURIComponent(window.location.origin);
-  const popupUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=email%20profile`;
-  window.open(popupUrl, 'GoogleSignInPopup', 'width=500,height=600,scrollbars=yes');
 }
 
 function parseJwt(token) {
