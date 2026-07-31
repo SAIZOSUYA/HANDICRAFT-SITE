@@ -44,6 +44,8 @@
       </div>
     </div>
 
+    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+
     <nav>
       <ul class="nav-links">
         <li><a href="#hero" class="active">Home</a></li>
@@ -205,8 +207,8 @@
   </section>
 
   <!-- Main Footer -->
-  <footer class="main-footer">
-    <div class="footer-inner">
+  <footer class="main-footer" style="background: var(--bg-dark); color: var(--text-light); padding: 4rem 2rem 2rem; border-top: 1px solid var(--border-gold);">
+    <div class="footer-inner" style="max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
       <div class="footer-brand">
         <div class="brand-logo" style="margin-bottom: 1rem;">
           <div class="brand-seal" style="border-color: var(--accent-gold);">B</div>
@@ -215,32 +217,32 @@
             <span class="brand-subtitle" style="color: var(--text-light);">Handicraft</span>
           </div>
         </div>
-        <p>
+        <p style="color: #A9A59C; font-size: 0.88rem;">
           Manufacturer of handcrafted wooden furniture, antique brass decor, and marble inlay artifacts.
         </p>
       </div>
 
       <div class="footer-col">
-        <h4>Craft Categories</h4>
-        <ul>
-          <li><a href="#catalog" onclick="setCategoryFilter('wooden')">Wooden Furniture</a></li>
-          <li><a href="#catalog" onclick="setCategoryFilter('brass')">Brass & Metalware</a></li>
-          <li><a href="#catalog" onclick="setCategoryFilter('marble')">Marble Inlay</a></li>
-          <li><a href="#catalog" onclick="setCategoryFilter('textiles')">Handwoven Textiles</a></li>
+        <h4 style="color: var(--text-gold); margin-bottom: 1rem; font-size: 1rem;">Craft Categories</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem;">
+          <li><a href="#catalog" onclick="setCategoryFilter('wooden')" style="color: #A9A59C; text-decoration: none;">Wooden Furniture</a></li>
+          <li><a href="#catalog" onclick="setCategoryFilter('brass')" style="color: #A9A59C; text-decoration: none;">Brass & Metalware</a></li>
+          <li><a href="#catalog" onclick="setCategoryFilter('marble')" style="color: #A9A59C; text-decoration: none;">Marble Inlay</a></li>
+          <li><a href="#catalog" onclick="setCategoryFilter('textiles')" style="color: #A9A59C; text-decoration: none;">Handwoven Textiles</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="#" onclick="document.getElementById('btn-open-admin').click()">Admin Control Panel</a></li>
-          <li><a href="#" onclick="document.getElementById('btn-open-rfq').click()">Inquiry Basket</a></li>
-          <li><a href="#custom-studio">Custom Orders</a></li>
+        <h4 style="color: var(--text-gold); margin-bottom: 1rem; font-size: 1rem;">Quick Links</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem;">
+          <li><a href="#" onclick="document.getElementById('btn-open-admin').click()" style="color: #A9A59C; text-decoration: none;">Admin Control Panel</a></li>
+          <li><a href="#" onclick="document.getElementById('btn-open-rfq').click()" style="color: #A9A59C; text-decoration: none;">Inquiry Basket</a></li>
+          <li><a href="#custom-studio" style="color: #A9A59C; text-decoration: none;">Custom Orders</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Artisan Studio</h4>
+        <h4 style="color: var(--text-gold); margin-bottom: 1rem; font-size: 1rem;">Artisan Studio</h4>
         <p style="font-size: 0.85rem; color: #A9A59C;">
           Barahi Handicraft Studio,<br>
           Artisan Craft Village
@@ -248,7 +250,7 @@
       </div>
     </div>
 
-    <div class="footer-bottom">
+    <div class="footer-bottom" style="max-width: 1300px; margin: 0 auto; border-top: 1px solid var(--border-dark); padding-top: 1.5rem; display: flex; justify-content: space-between; font-size: 0.8rem; color: #A9A59C;">
       <span>© 2026 Barahi Handicraft Pvt. Ltd. All rights reserved.</span>
       <span>Authentic Handmade Artistry</span>
     </div>
@@ -256,10 +258,10 @@
 
 
   <!-- ==========================================================================
-       GOOGLE USER ENTRANCE GATEWAY POPUP (Displays on initial site entry)
+       STRICT GOOGLE ENTRANCE GATEWAY MODAL (Guest option removed)
        ========================================================================== -->
-  <div class="modal-overlay" id="google-user-gate-modal" style="backdrop-filter: blur(8px); background: rgba(10, 7, 5, 0.85);">
-    <div class="admin-modal-content login-modal-content" style="text-align: center; max-width: 440px; padding: 2rem;">
+  <div class="modal-overlay" id="google-user-gate-modal" style="backdrop-filter: blur(8px); background: rgba(10, 7, 5, 0.88);">
+    <div class="admin-modal-content login-modal-content" style="text-align: center; max-width: 440px; padding: 2.2rem 1.75rem;">
       <div style="margin: 0 auto 1rem auto; width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent-gold); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--text-gold); background: var(--bg-surface-elevated);">
         B
       </div>
@@ -268,18 +270,12 @@
         Barahi Handicraft
       </h2>
       <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-        Sign in with Google to enter our artisan craft showcase, view collections, and request custom orders.
+        Please sign in with Google to enter our artisan craft showcase, view product collections, and request custom orders.
       </p>
 
       <!-- Rendered Google GSI Button Container -->
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 1.5rem; width: 100%;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;">
         <div id="g_gate_signin_btn" style="display: flex; justify-content: center; width: 100%;"></div>
-      </div>
-
-      <div style="border-top: 1px solid var(--border-light); padding-top: 1rem;">
-        <button id="btn-continue-guest" style="background: transparent; color: var(--text-muted); border: none; font-size: 0.82rem; cursor: pointer; text-decoration: underline;">
-          Continue to Site as Guest →
-        </button>
       </div>
     </div>
   </div>
@@ -296,7 +292,6 @@
       </div>
 
       <div class="admin-body" style="gap: 1.25rem;">
-        <!-- Rendered Google GSI Button Container -->
         <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
           <div id="g_admin_signin_btn" style="display: flex; justify-content: center; width: 100%;"></div>
         </div>

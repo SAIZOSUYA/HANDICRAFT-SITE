@@ -19,6 +19,7 @@ function getAdminPassword() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initMobileMenu();
   initGoogleEntranceGate();
   initAdminAuth();
   initAdminModal();
@@ -27,10 +28,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initGoogleAuth();
 });
 
+function initMobileMenu() {
+  const btn = document.getElementById('mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+
+  if (btn && navLinks) {
+    btn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Close menu when link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+  }
+}
+
 // Entrance Gate popup check on initial site load
 function initGoogleEntranceGate() {
   const gateModal = document.getElementById('google-user-gate-modal');
-  const btnGuest = document.getElementById('btn-continue-guest');
 
   const isUserLoggedIn = sessionStorage.getItem(STORAGE_KEY_USER_LOGGED_IN);
   const userProfile = JSON.parse(sessionStorage.getItem(STORAGE_KEY_GOOGLE_PROFILE) || '{}');
@@ -41,14 +59,6 @@ function initGoogleEntranceGate() {
     }, 400);
   } else if (userProfile.name) {
     updateTopBarUserBadge(userProfile);
-  }
-
-  if (btnGuest && gateModal) {
-    btnGuest.addEventListener('click', () => {
-      sessionStorage.setItem(STORAGE_KEY_USER_LOGGED_IN, 'guest');
-      gateModal.classList.remove('active');
-      showToast('Welcome to Barahi Handicraft Studio!');
-    });
   }
 }
 
@@ -103,7 +113,6 @@ function initGoogleAuth() {
     }
   };
 
-  // Wait for Google SDK to load, then render GSI buttons cleanly
   const checkGoogleSdk = setInterval(() => {
     if (window.google && window.google.accounts && window.google.accounts.id) {
       clearInterval(checkGoogleSdk);
@@ -115,7 +124,6 @@ function initGoogleAuth() {
           cancel_on_tap_outside: false
         });
 
-        // Render GSI button inside Entrance Gate container if present
         const gateBtnContainer = document.getElementById('g_gate_signin_btn');
         if (gateBtnContainer) {
           google.accounts.id.renderButton(gateBtnContainer, {
@@ -125,11 +133,10 @@ function initGoogleAuth() {
             text: 'signin_with',
             shape: 'rectangular',
             logo_alignment: 'left',
-            width: 320
+            width: 280
           });
         }
 
-        // Render GSI button inside Admin Login container if present
         const adminBtnContainer = document.getElementById('g_admin_signin_btn');
         if (adminBtnContainer) {
           google.accounts.id.renderButton(adminBtnContainer, {
@@ -139,11 +146,10 @@ function initGoogleAuth() {
             text: 'signin_with',
             shape: 'rectangular',
             logo_alignment: 'left',
-            width: 320
+            width: 280
           });
         }
 
-        // Trigger One-Tap prompt automatically
         google.accounts.id.prompt();
       } catch (err) {
         console.warn('GSI Init Warning', err);
