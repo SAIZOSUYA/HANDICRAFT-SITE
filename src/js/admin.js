@@ -18,6 +18,9 @@ function getAdminPassword() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Ensure all modals start closed on initial page load (Landing Page access only)
+  closeAllModalsOnLoad();
+  
   initAdminAuth();
   initAdminModal();
   initFormUploadHandlers();
@@ -25,8 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initGoogleAuth();
 });
 
+function closeAllModalsOnLoad() {
+  const modals = document.querySelectorAll('.modal-overlay');
+  modals.forEach(m => m.classList.remove('active'));
+
+  const drawer = document.getElementById('rfq-drawer');
+  if (drawer) drawer.classList.remove('active');
+}
+
 function initGoogleAuth() {
-  // Initialize Google Identity Services
   if (window.google && window.google.accounts && window.google.accounts.id) {
     try {
       google.accounts.id.initialize({
@@ -39,7 +49,6 @@ function initGoogleAuth() {
     }
   }
 
-  // Global callback for Google Sign-In JWT response
   window.handleGoogleSignInCallback = function(response) {
     if (!response || !response.credential) {
       alert('Google Sign-In failed. Please try again.');
@@ -73,7 +82,6 @@ function initGoogleAuth() {
     }
   };
 
-  // Explicit Google Popup Sign-in trigger button handler
   window.triggerGooglePopupSignin = function() {
     if (window.google && window.google.accounts && window.google.accounts.id) {
       google.accounts.id.initialize({
@@ -82,7 +90,6 @@ function initGoogleAuth() {
       });
       google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          // If One Tap is skipped, trigger popup window
           openGoogleOAuthPopupWindow();
         }
       });
