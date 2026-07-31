@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barahi Handicraft | Handcrafted Wooden, Brass & Marble Artifacts</title>
+  <meta name="description" content="Handcrafted wooden furniture, antique brass decor, and marble inlay masterpieces. Direct artisan craftsmanship.">
+  
+  <link rel="stylesheet" href="src/css/style.css">
+  <link rel="stylesheet" href="src/css/admin.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="top-bar-notice">
+      <span>✨ <strong>Barahi Handicraft</strong> — Direct Artisan Studio</span>
+    </div>
+    <div class="top-bar-actions">
+      <span>Select Currency:</span>
+      <select id="currency-select">
+        <option value="NPR" selected>NRs (रु)</option>
+        <option value="INR">INR (₹)</option>
+        <option value="USD">USD ($)</option>
+        <option value="EUR">EUR (€)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Header Navigation Bar -->
+  <header class="main-header">
+    <div class="brand-logo">
+      <div class="brand-seal">B</div>
+      <div class="brand-name-group">
+        <span class="brand-title">Barahi</span>
+        <span class="brand-subtitle">Handicraft</span>
+      </div>
+    </div>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#hero" class="active">Home</a></li>
+        <li><a href="#catalog">Craft Catalog</a></li>
+        <li><a href="#custom-studio">Custom Orders</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn-admin" id="btn-open-admin">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Admin Control Panel
+      </button>
+
+      <button class="btn-rfq" id="btn-open-rfq">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+        </svg>
+        Inquiry Basket
+        <span class="rfq-badge" id="rfq-cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <span>🪵 Fine Handicrafts & Artistry</span>
+      </div>
+      <h1 class="hero-title">
+        Handcrafted Artistry.<br>
+        <span>Crafted for Generations.</span>
+      </h1>
+      <p class="hero-description">
+        Carved wooden furniture, hand-hammered brass artifacts, and intricate marble inlay masterpieces straight from artisan workshops to your spaces.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#catalog" class="btn-primary">Explore Craft Catalog</a>
+        <button class="btn-outline" onclick="document.getElementById('btn-open-admin').click()">
+          + Add Products via Admin Panel
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-visual-card">
+      <div class="hero-card-header">
+        <span class="hero-card-badge">Handicraft Showcase</span>
+        <span style="font-size: 0.8rem; color: var(--text-gold);">Direct Studio Pricing</span>
+      </div>
+
+      <div class="hero-placeholder-box">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <div class="hero-placeholder-title">[ Featured Handicraft Display ]</div>
+        <p class="hero-placeholder-sub">
+          Manage product catalog, upload multi-side pictures, and configure product details in the <strong>Admin Control Panel</strong>.
+        </p>
+        <button class="btn-admin" style="margin-top: 10px;" onclick="document.getElementById('btn-open-admin').click()">
+          Open Admin Panel
+        </button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-top: 1px solid var(--border-dark); padding-top: 1rem;">
+        <span>Quality Guaranteed</span>
+        <span>Custom Orders Available</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catalog Filter & Search Section -->
+  <section class="catalog-container" id="catalog">
+    <div class="section-header">
+      <span class="section-tag">Studio Showcase</span>
+      <h2>Handcrafted Collections</h2>
+      <p>Explore carved wooden furniture, brassware, marble inlay, and artisanal textiles.</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="category-pills" id="category-pills-container">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="catalog-search-input" placeholder="Search by title, code, or material...">
+      </div>
+    </div>
+
+    <!-- Products Grid (Renders clean side-labeled placeholders when no pictures uploaded) -->
+    <div class="products-grid" id="products-grid-container">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- Custom Product Order Section -->
+  <section id="custom-studio" style="padding: 5rem 2rem; max-width: 1300px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+      <div>
+        <span class="section-tag">Tailored Artisan Creations</span>
+        <h2 style="margin-bottom: 1.5rem;">Custom Handicrafts & Personalized Orders</h2>
+        <p style="margin-bottom: 1.5rem;">
+          Looking for custom dimensions, engraved names, or tailored finishes for your favorite handicraft product? Our master artisans craft personalized wooden, brass, and marble decor tailored to your exact style.
+        </p>
+
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 2rem; font-size: 0.95rem;">
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span style="color: var(--accent-gold); font-weight: 700;">✓</span> Custom Carvings & Engraved Personalizations
+          </li>
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span style="color: var(--accent-gold); font-weight: 700;">✓</span> Choice of Fine Wood, Brass, or Marble Finishes
+          </li>
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span style="color: var(--accent-gold); font-weight: 700;">✓</span> Crafted Directly by Master Artisans
+          </li>
+        </ul>
+      </div>
+
+      <div style="background: var(--bg-dark); color: var(--text-light); border-radius: var(--radius-lg); padding: 2.5rem; border: 1px solid var(--border-gold);">
+        <h3 style="color: var(--text-gold); margin-bottom: 1rem;">Request a Custom Handicraft</h3>
+        <p style="color: #A9A59C; font-size: 0.88rem; margin-bottom: 1.5rem;">Tell us your product preferences below:</p>
+
+        <!-- Clean Form ready for User Entry -->
+        <form id="custom-spec-form" onsubmit="event.preventDefault(); alert('Custom Inquiry Received! Our craft design team will contact you shortly.'); this.reset();">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <input type="text" class="form-control" placeholder="Your Full Name *" required>
+            <input type="email" class="form-control" placeholder="Email Address *" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <select class="form-control">
+              <option value="">Select Preferred Material</option>
+              <option value="wood">Solid Wood</option>
+              <option value="brass">Pure Brass Metalwork</option>
+              <option value="marble">White Marble</option>
+            </select>
+            <input type="number" class="form-control" placeholder="Desired Quantity">
+          </div>
+          <textarea class="form-control" rows="3" placeholder="Describe your custom design, engraving details, or finish preferences..." style="margin-bottom: 1.25rem;"></textarea>
+
+          <button type="submit" class="btn-primary" style="width: 100%;">
+            Submit Custom Order Request
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-seal" style="border-color: var(--accent-gold);">B</div>
+          <div class="brand-name-group">
+            <span class="brand-title" style="color: var(--text-gold);">Barahi</span>
+            <span class="brand-subtitle" style="color: var(--text-light);">Handicraft</span>
+          </div>
+        </div>
+        <p>
+          Manufacturer of handcrafted wooden furniture, antique brass decor, and marble inlay artifacts.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Craft Categories</h4>
+        <ul>
+          <li><a href="#catalog" onclick="setCategoryFilter('wooden')">Wooden Furniture</a></li>
+          <li><a href="#catalog" onclick="setCategoryFilter('brass')">Brass & Metalware</a></li>
+          <li><a href="#catalog" onclick="setCategoryFilter('marble')">Marble Inlay</a></li>
+          <li><a href="#catalog" onclick="setCategoryFilter('textiles')">Handwoven Textiles</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#" onclick="document.getElementById('btn-open-admin').click()">Admin Control Panel</a></li>
+          <li><a href="#" onclick="document.getElementById('btn-open-rfq').click()">Inquiry Basket</a></li>
+          <li><a href="#custom-studio">Custom Orders</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Artisan Studio</h4>
+        <p style="font-size: 0.85rem; color: #A9A59C;">
+          Barahi Handicraft Studio,<br>
+          Artisan Craft Village
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Barahi Handicraft Pvt. Ltd. All rights reserved.</span>
+      <span>Authentic Handmade Artistry</span>
+    </div>
+  </footer>
+
+
+  <!-- ==========================================================================
+       ADMIN CONTROL PANEL MODAL (Product Add/Edit & Side-Labeled Picture Upload)
+       ========================================================================== -->
+  <div class="modal-overlay" id="admin-modal-overlay">
+    <div class="admin-modal-content">
+      <div class="modal-header">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Barahi Handicraft — Admin Control Panel
+        </h3>
+        <button class="btn-close-modal" id="btn-close-admin">✕</button>
+      </div>
+
+      <div class="admin-body">
+        <!-- Add / Edit Form Section -->
+        <div>
+          <div class="admin-section-title">
+            <span>Add / Edit Handicraft Product & Picture Slots</span>
+            <small style="font-size: 0.75rem; color: var(--accent-teak);">
+              All forms are clean for custom inputs
+            </small>
+          </div>
+
+          <form id="admin-add-product-form">
+            <div class="admin-form-grid">
+              <div class="form-group">
+                <label>Product Title *</label>
+                <input type="text" id="admin-prod-title" class="form-control" placeholder="e.g. Carved Teakwood Dining Chair" required>
+              </div>
+
+              <div class="form-group">
+                <label>Craft Category *</label>
+                <select id="admin-prod-category" class="form-control" required>
+                  <option value="wooden">Wooden Furniture & Carvings</option>
+                  <option value="brass">Brass & Metal Decor</option>
+                  <option value="marble">Marble Inlay & Sculptures</option>
+                  <option value="textiles">Handwoven Textiles & Rugs</option>
+                  <option value="terracotta">Terracotta & Ceramics</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Price (NRs) *</label>
+                <input type="number" step="1" id="admin-prod-price" class="form-control" placeholder="e.g. 48000" required>
+              </div>
+
+              <div class="form-group">
+                <label>Product Item Code</label>
+                <input type="text" id="admin-prod-code" class="form-control" placeholder="e.g. BH-W-104">
+              </div>
+
+              <div class="form-group">
+                <label>Primary Material / Timber</label>
+                <input type="text" id="admin-prod-material" class="form-control" placeholder="e.g. Solid Wood">
+              </div>
+
+              <div class="form-group">
+                <label>Craft Origin / Artisan Hub</label>
+                <input type="text" id="admin-prod-origin" class="form-control" placeholder="e.g. Artisan Studio">
+              </div>
+
+              <div class="form-group">
+                <label>Production Lead Time</label>
+                <input type="text" id="admin-prod-leadtime" class="form-control" placeholder="e.g. 2-3 Weeks">
+              </div>
+
+              <div class="form-group full-width">
+                <label>Artisanal Technique & Finishing</label>
+                <input type="text" id="admin-prod-technique" class="form-control" placeholder="e.g. Hand-carved lattice work">
+              </div>
+
+              <div class="form-group full-width">
+                <label>Product Description & Specifications</label>
+                <textarea id="admin-prod-desc" class="form-control" placeholder="Enter product details, care instructions, or custom options..."></textarea>
+              </div>
+
+              <!-- Labeled Multi-Side Picture Uploader Slots -->
+              <div class="image-slots-grid">
+                <!-- Slot 1: Primary Front Catalog View -->
+                <div class="image-slot-card">
+                  <div class="slot-side-header">
+                    <span>1. Primary Front View</span>
+                    <span class="slot-side-badge">Slot 1</span>
+                  </div>
+                  <div class="slot-preview-box" id="preview-slot-front">
+                    <div class="slot-empty-notice">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      <div>[ Slot 1: Front Catalog View ]</div>
+                      <small style="opacity:0.6;">No Picture Uploaded</small>
+                    </div>
+                  </div>
+                  <div class="slot-inputs">
+                    <div class="file-btn-wrapper">
+                      <button type="button" class="btn-file-upload">📁 Choose Image File</button>
+                      <input type="file" id="file-slot-front" accept="image/*">
+                    </div>
+                    <div class="url-input-group">
+                      <input type="text" id="url-slot-front" class="form-control" placeholder="or paste Image URL...">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slot 2: Craft Detail & Texture Close-up -->
+                <div class="image-slot-card">
+                  <div class="slot-side-header">
+                    <span>2. Craft Detail & Texture</span>
+                    <span class="slot-side-badge">Slot 2</span>
+                  </div>
+                  <div class="slot-preview-box" id="preview-slot-detail">
+                    <div class="slot-empty-notice">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      <div>[ Slot 2: Craft Detail & Texture ]</div>
+                      <small style="opacity:0.6;">No Picture Uploaded</small>
+                    </div>
+                  </div>
+                  <div class="slot-inputs">
+                    <div class="file-btn-wrapper">
+                      <button type="button" class="btn-file-upload">📁 Choose Image File</button>
+                      <input type="file" id="file-slot-detail" accept="image/*">
+                    </div>
+                    <div class="url-input-group">
+                      <input type="text" id="url-slot-detail" class="form-control" placeholder="or paste Image URL...">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slot 3: Dimensions & Spec Diagram -->
+                <div class="image-slot-card">
+                  <div class="slot-side-header">
+                    <span>3. Dimensions & Spec</span>
+                    <span class="slot-side-badge">Slot 3</span>
+                  </div>
+                  <div class="slot-preview-box" id="preview-slot-dimension">
+                    <div class="slot-empty-notice">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      </svg>
+                      <div>[ Slot 3: Dimensions & Spec ]</div>
+                      <small style="opacity:0.6;">No Picture Uploaded</small>
+                    </div>
+                  </div>
+                  <div class="slot-inputs">
+                    <div class="file-btn-wrapper">
+                      <button type="button" class="btn-file-upload">📁 Choose Image File</button>
+                      <input type="file" id="file-slot-dimension" accept="image/*">
+                    </div>
+                    <div class="url-input-group">
+                      <input type="text" id="url-slot-dimension" class="form-control" placeholder="or paste Image URL...">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group full-width" style="margin-top: 1rem;">
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                  💾 Save & Publish Product to Barahi Catalog
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Inventory Table Section -->
+        <div>
+          <div class="admin-section-title">
+            <span>Manage Existing Catalog Products</span>
+          </div>
+
+          <div class="inventory-table-wrapper">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th>Media Slot 1</th>
+                  <th>Product Info</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Side Image Slots</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-inventory-table-body">
+                <!-- Rendered by admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       PRODUCT DETAIL MODAL (Multi-Side Image View Tabs)
+       ========================================================================== -->
+  <div class="modal-overlay" id="detail-modal-overlay">
+    <div class="admin-modal-content" style="max-width: 900px;">
+      <div class="modal-header">
+        <h3>Product Specifications & Multi-Side View</h3>
+        <button class="btn-close-modal" id="btn-close-detail">✕</button>
+      </div>
+      <div class="admin-body" id="detail-modal-body">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       INQUIRY BASKET & ORDER INQUIRY DRAWER
+       ========================================================================== -->
+  <div class="rfq-drawer" id="rfq-drawer">
+    <div class="drawer-header">
+      <h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+        </svg>
+        Inquiry & Order Basket
+      </h3>
+      <button class="btn-close-modal" id="btn-close-rfq">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">
+        Selected Handicraft Items
+      </div>
+
+      <div id="rfq-cart-items-container" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Rendered by rfq.js -->
+      </div>
+
+      <div style="border-top: 1px solid var(--border-light); padding-top: 1rem;">
+        <h4 style="margin-bottom: 8px;">Customer Information</h4>
+        
+        <!-- Clean Customer Form ready for entry -->
+        <form id="buyer-rfq-inquiry-form">
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem;">
+            <input type="text" id="buyer-company" class="form-control" placeholder="Your Full Name *" required>
+            <input type="email" id="buyer-email" class="form-control" placeholder="Email Address *" required>
+            <input type="text" id="buyer-port" class="form-control" placeholder="Delivery Address / City *" required>
+            <textarea id="buyer-notes" class="form-control" rows="2" placeholder="Special instructions or custom notes..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%;">
+            ✉ Send Product Inquiry
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="src/js/state.js"></script>
+  <script src="src/js/admin.js"></script>
+  <script src="src/js/app.js"></script>
+  <script src="src/js/rfq.js"></script>
+</body>
+</html>
