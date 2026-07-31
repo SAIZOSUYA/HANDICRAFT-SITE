@@ -53,6 +53,7 @@ html {
 
 body {
   overflow-x: hidden;
+  width: 100%;
 }
 
 /* Typography */
@@ -103,10 +104,10 @@ h1, h2, h3, h4, .brand-title {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(252, 250, 241, 0.94);
+  background: rgba(252, 250, 241, 0.96);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-light);
-  padding: 1rem 2rem;
+  padding: 0.85rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -115,13 +116,13 @@ h1, h2, h3, h4, .brand-title {
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
 }
 
 .brand-seal {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--bg-dark);
   color: var(--text-gold);
@@ -129,7 +130,7 @@ h1, h2, h3, h4, .brand-title {
   align-items: center;
   justify-content: center;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   border: 1px solid var(--border-gold);
   flex-shrink: 0;
@@ -141,14 +142,14 @@ h1, h2, h3, h4, .brand-title {
 }
 
 .brand-title {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--text-primary);
   line-height: 1;
 }
 
 .brand-subtitle {
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent-teak);
   font-weight: 600;
@@ -196,26 +197,27 @@ h1, h2, h3, h4, .brand-title {
   background: transparent;
   border: 1px solid var(--border-light);
   color: var(--text-primary);
-  font-size: 1.3rem;
-  padding: 4px 10px;
+  font-size: 1.4rem;
+  padding: 2px 8px;
   border-radius: var(--radius-sm);
   cursor: pointer;
+  line-height: 1;
 }
 
 /* Header Action Buttons */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .btn-admin {
   background: var(--bg-dark);
   color: var(--text-gold);
   border: 1px solid var(--border-gold);
-  padding: 0.55rem 1.1rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius-sm);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -234,14 +236,14 @@ h1, h2, h3, h4, .brand-title {
   background: var(--accent-teak);
   color: var(--text-light);
   border: none;
-  padding: 0.55rem 1.1rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius-sm);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   position: relative;
   transition: all var(--transition-fast);
 }
@@ -282,7 +284,7 @@ h1, h2, h3, h4, .brand-title {
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .hero-title {
@@ -435,14 +437,16 @@ h1, h2, h3, h4, .brand-title {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2.5rem;
-  flex-wrap: wrap;
   gap: 1rem;
 }
 
 .category-pills {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
 }
 
 .pill-btn {
@@ -455,6 +459,7 @@ h1, h2, h3, h4, .brand-title {
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .pill-btn:hover,
@@ -472,6 +477,7 @@ h1, h2, h3, h4, .brand-title {
   display: flex;
   align-items: center;
   width: 280px;
+  flex-shrink: 0;
 }
 
 .search-box input {
@@ -522,7 +528,6 @@ h1, h2, h3, h4, .brand-title {
   object-fit: cover;
 }
 
-/* Side Labeled Placeholder Card Display */
 .side-labeled-placeholder {
   width: 100%;
   height: 100%;
@@ -619,7 +624,7 @@ h1, h2, h3, h4, .brand-title {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(10, 7, 5, 0.8);
+  background: rgba(10, 7, 5, 0.82);
   backdrop-filter: blur(6px);
   z-index: 1000;
   display: flex;
@@ -644,6 +649,7 @@ h1, h2, h3, h4, .brand-title {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-width: 90vw;
 }
 
 .toast {
@@ -664,14 +670,15 @@ h1, h2, h3, h4, .brand-title {
 }
 
 /* ==========================================================================
-   MOBILE & TABLET RESPONSIVE MEDIA QUERIES
+   ADVANCED MOBILE & RESPONSIVE BREAKPOINTS (Mobile-First Optimization)
    ========================================================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .top-bar {
-    justify-content: center;
+    flex-direction: column;
     text-align: center;
-    padding: 0.5rem 1rem;
+    gap: 6px;
+    padding: 0.4rem 1rem;
   }
 
   .main-header {
@@ -684,17 +691,18 @@ h1, h2, h3, h4, .brand-title {
 
   .nav-links {
     position: fixed;
-    top: 65px;
+    top: 60px;
     left: 0;
     width: 100%;
     background: var(--bg-primary);
     border-bottom: 1px solid var(--border-light);
     flex-direction: column;
     padding: 1.5rem;
-    gap: 1rem;
+    gap: 1.25rem;
     transform: translateY(-150%);
     transition: transform var(--transition-smooth);
     box-shadow: var(--shadow-md);
+    z-index: 99;
   }
 
   .nav-links.active {
@@ -703,29 +711,30 @@ h1, h2, h3, h4, .brand-title {
 
   .hero-section {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 2rem;
     padding: 2.5rem 1rem;
   }
 
   .hero-title {
-    font-size: 2.4rem;
-  }
-
-  .catalog-container {
-    padding: 2.5rem 1rem;
+    font-size: 2.5rem;
   }
 
   .filter-bar {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem;
   }
 
   .search-box {
     width: 100%;
   }
 
+  .catalog-container {
+    padding: 2.5rem 1rem;
+  }
+
   #custom-studio {
-    padding: 3rem 1rem !important;
+    padding: 2.5rem 1rem !important;
   }
 
   #custom-studio > div {
@@ -739,18 +748,17 @@ h1, h2, h3, h4, .brand-title {
   }
 }
 
-@media (max-width: 600px) {
-  .header-actions {
-    gap: 6px;
+@media (max-width: 580px) {
+  .top-bar-notice {
+    font-size: 0.72rem;
   }
 
-  .btn-admin, .btn-rfq {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.75rem;
+  .main-header {
+    padding: 0.6rem 0.85rem;
   }
 
   .brand-title {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
 
   .brand-seal {
@@ -759,23 +767,65 @@ h1, h2, h3, h4, .brand-title {
     font-size: 1.1rem;
   }
 
+  .header-actions {
+    gap: 6px;
+  }
+
+  .btn-admin, .btn-rfq {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.72rem;
+  }
+
   .hero-title {
-    font-size: 1.9rem;
+    font-size: 1.95rem;
+    line-height: 1.2;
+  }
+
+  .hero-description {
+    font-size: 0.92rem;
+    margin-bottom: 1.5rem;
   }
 
   .hero-ctas {
     flex-direction: column;
+    width: 100%;
   }
 
   .hero-ctas a, .hero-ctas button {
     width: 100%;
   }
 
+  .hero-placeholder-box {
+    padding: 2rem 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.85rem;
+  }
+
   .products-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .product-media-container {
+    height: 200px;
   }
 
   .footer-inner {
     grid-template-columns: 1fr !important;
+    gap: 1.75rem !important;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .toast-container {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
   }
 }
