@@ -258,7 +258,7 @@
 
 
   <!-- ==========================================================================
-       STRICT GOOGLE ENTRANCE GATEWAY MODAL (Guest option removed)
+       GOOGLE USER ENTRANCE GATEWAY MODAL (For Visitors)
        ========================================================================== -->
   <div class="modal-overlay" id="google-user-gate-modal" style="backdrop-filter: blur(8px); background: rgba(10, 7, 5, 0.88);">
     <div class="admin-modal-content login-modal-content" style="text-align: center; max-width: 440px; padding: 2.2rem 1.75rem;">
@@ -273,7 +273,6 @@
         Please sign in with Google to enter our artisan craft showcase, view product collections, and request custom orders.
       </p>
 
-      <!-- Rendered Google GSI Button Container -->
       <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;">
         <div id="g_gate_signin_btn" style="display: flex; justify-content: center; width: 100%;"></div>
       </div>
@@ -282,33 +281,29 @@
 
 
   <!-- ==========================================================================
-       ADMIN AUTHENTICATION LOGIN MODAL
+       STRICT ADMIN AUTHENTICATION LOGIN MODAL (Admin Credentials Only!)
        ========================================================================== -->
   <div class="modal-overlay" id="admin-login-modal">
     <div class="admin-modal-content login-modal-content">
       <div class="modal-header">
-        <h3>🔒 Admin Access Login</h3>
+        <h3>🔒 Admin Control Panel Access</h3>
         <button class="btn-close-modal" id="btn-close-login">✕</button>
       </div>
 
       <div class="admin-body" style="gap: 1.25rem;">
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
-          <div id="g_admin_signin_btn" style="display: flex; justify-content: center; width: 100%;"></div>
-        </div>
-
-        <div style="text-align: center; font-size: 0.8rem; color: var(--text-muted);">
-          — or login with Admin Credentials —
-        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          Access restricted to store administrator only. Please enter your valid <strong>Admin Credentials</strong> below.
+        </p>
 
         <form id="admin-login-form">
           <div class="form-group" style="margin-bottom: 1rem;">
             <label>Admin Username *</label>
-            <input type="text" id="admin-login-user" class="form-control" placeholder="Enter username" required>
+            <input type="text" id="admin-login-user" class="form-control" placeholder="Enter admin username" required>
           </div>
 
           <div class="form-group" style="margin-bottom: 1.25rem;">
             <label>Admin Password *</label>
-            <input type="password" id="admin-login-pass" class="form-control" placeholder="Enter password" required>
+            <input type="password" id="admin-login-pass" class="form-control" placeholder="Enter admin password" required>
           </div>
 
           <button type="submit" class="btn-primary" style="width: 100%; margin-bottom: 1rem;">
@@ -388,9 +383,6 @@
         </h3>
 
         <div style="display: flex; align-items: center; gap: 10px;">
-          <!-- User profile avatar/name display -->
-          <div id="admin-user-profile-badge" style="display: flex; align-items: center; gap: 6px;"></div>
-
           <button id="btn-open-change-pass" style="background: rgba(208, 190, 121, 0.15); color: var(--text-gold); border: 1px solid var(--border-gold); padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
             🔑 Change Password
           </button>

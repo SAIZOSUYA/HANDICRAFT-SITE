@@ -1,5 +1,5 @@
 /* ==========================================================================
-   BARAHI HANDICRAFT — Google Entrance Gate & Admin Authentication
+   BARAHI HANDICRAFT — Google Entrance Gate & Strict Admin Authentication
    Client ID: 831474336400-de4pm9gpvfhokqa76mkj0kiodm49kjsl.apps.googleusercontent.com
    ========================================================================== */
 
@@ -37,7 +37,6 @@ function initMobileMenu() {
       navLinks.classList.toggle('active');
     });
 
-    // Close menu when link is clicked
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('active');
@@ -46,10 +45,9 @@ function initMobileMenu() {
   }
 }
 
-// Entrance Gate popup check on initial site load
+// Entrance Gate popup check on initial site load for general site users
 function initGoogleEntranceGate() {
   const gateModal = document.getElementById('google-user-gate-modal');
-
   const isUserLoggedIn = sessionStorage.getItem(STORAGE_KEY_USER_LOGGED_IN);
   const userProfile = JSON.parse(sessionStorage.getItem(STORAGE_KEY_GOOGLE_PROFILE) || '{}');
 
@@ -79,6 +77,7 @@ function updateTopBarUserBadge(profile) {
 }
 
 function initGoogleAuth() {
+  // Callback for Google Sign-In on the Entrance Gate (General Users)
   window.handleGoogleSignInCallback = function(response) {
     if (!response || !response.credential) {
       alert('Google Sign-In failed. Please try again.');
@@ -94,25 +93,23 @@ function initGoogleAuth() {
         sub: payload.sub
       };
 
+      // Mark general user as logged in (does NOT grant Admin Panel access!)
       sessionStorage.setItem(STORAGE_KEY_USER_LOGGED_IN, 'true');
-      sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
       sessionStorage.setItem(STORAGE_KEY_GOOGLE_PROFILE, JSON.stringify(userProfile));
 
+      // Dismiss Entrance Gate modal
       const gateModal = document.getElementById('google-user-gate-modal');
-      const loginOverlay = document.getElementById('admin-login-modal');
-
       if (gateModal) gateModal.classList.remove('active');
-      if (loginOverlay) loginOverlay.classList.remove('active');
 
       updateTopBarUserBadge(userProfile);
-      updateAdminUserBadge(userProfile);
-      showToast(`Welcome ${userProfile.name}! Access Granted.`);
+      showToast(`Welcome to Barahi Handicraft, ${userProfile.name}!`);
     } catch (e) {
       console.error('Failed to parse Google JWT Token', e);
       alert('Failed to process Google authentication.');
     }
   };
 
+  // Render Google GSI button only on the Entrance Gate for visitors
   const checkGoogleSdk = setInterval(() => {
     if (window.google && window.google.accounts && window.google.accounts.id) {
       clearInterval(checkGoogleSdk);
@@ -137,31 +134,12 @@ function initGoogleAuth() {
           });
         }
 
-        const adminBtnContainer = document.getElementById('g_admin_signin_btn');
-        if (adminBtnContainer) {
-          google.accounts.id.renderButton(adminBtnContainer, {
-            type: 'standard',
-            theme: 'filled_black',
-            size: 'large',
-            text: 'signin_with',
-            shape: 'rectangular',
-            logo_alignment: 'left',
-            width: 280
-          });
-        }
-
         google.accounts.id.prompt();
       } catch (err) {
         console.warn('GSI Init Warning', err);
       }
     }
   }, 300);
-
-  window.triggerGooglePopupSignin = function() {
-    if (window.google && window.google.accounts && window.google.accounts.id) {
-      google.accounts.id.prompt();
-    }
-  };
 }
 
 function parseJwt(token) {
@@ -173,22 +151,7 @@ function parseJwt(token) {
   return JSON.parse(jsonPayload);
 }
 
-function updateAdminUserBadge(profile) {
-  const badgeContainer = document.getElementById('admin-user-profile-badge');
-  if (!badgeContainer) return;
-
-  if (profile && profile.picture) {
-    badgeContainer.innerHTML = `
-      <img src="${profile.picture}" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--accent-gold);" />
-      <span style="font-size: 0.8rem; color: var(--text-gold);">${profile.name}</span>
-    `;
-  } else if (profile && profile.name) {
-    badgeContainer.innerHTML = `<span style="font-size: 0.8rem; color: var(--text-gold);">👤 ${profile.name}</span>`;
-  } else {
-    badgeContainer.innerHTML = '';
-  }
-}
-
+// STRICT ADMIN AUTHENTICATION (Unique Admin Credentials Only!)
 function initAdminAuth() {
   const btnOpenAdmin = document.getElementById('btn-open-admin');
   const btnCloseLogin = document.getElementById('btn-close-login');
@@ -199,11 +162,10 @@ function initAdminAuth() {
 
   if (btnOpenAdmin) {
     btnOpenAdmin.addEventListener('click', () => {
+      // Check strict admin authentication
       if (isAdminAuthenticated()) {
         adminOverlay.classList.add('active');
         renderAdminInventoryTable();
-        const googleProfile = JSON.parse(sessionStorage.getItem(STORAGE_KEY_GOOGLE_PROFILE) || '{}');
-        updateAdminUserBadge(googleProfile);
       } else {
         loginOverlay.classList.add('active');
       }
@@ -235,14 +197,13 @@ function initAdminAuth() {
 
       if (user === activeUser && pass === activePass) {
         sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
-        sessionStorage.removeItem(STORAGE_KEY_GOOGLE_PROFILE);
         loginOverlay.classList.remove('active');
         adminOverlay.classList.add('active');
         renderAdminInventoryTable();
         showToast('Successfully authenticated as Admin!');
         loginForm.reset();
       } else {
-        alert('Invalid Admin Username or Password.');
+        alert('Access Denied: Invalid Admin Username or Password. Google accounts cannot access Admin Panel.');
       }
     });
   }
@@ -250,7 +211,6 @@ function initAdminAuth() {
   if (btnLogoutAdmin) {
     btnLogoutAdmin.addEventListener('click', () => {
       sessionStorage.removeItem(STORAGE_KEY_ADMIN_AUTH);
-      sessionStorage.removeItem(STORAGE_KEY_GOOGLE_PROFILE);
       adminOverlay.classList.remove('active');
       showToast('Logged out of Admin Control Panel.');
     });
