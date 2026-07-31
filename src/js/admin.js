@@ -1,10 +1,13 @@
 /* ==========================================================================
-   BARAHI HANDICRAFT — Admin Authentication & Management Panel
+   BARAHI HANDICRAFT — Admin Authentication & Google Sign-In Integration
+   Client ID: 831474336400-de4pm9gpvfhokqa76mkj0kiodm49kjsl.apps.googleusercontent.com
    ========================================================================== */
 
+const GOOGLE_CLIENT_ID = '831474336400-de4pm9gpvfhokqa76mkj0kiodm49kjsl.apps.googleusercontent.com';
 const STORAGE_KEY_ADMIN_USER = 'barahi_admin_user';
 const STORAGE_KEY_ADMIN_PASS = 'barahi_admin_pass';
 const STORAGE_KEY_ADMIN_AUTH = 'barahi_admin_auth';
+const STORAGE_KEY_GOOGLE_PROFILE = 'barahi_google_profile';
 
 // Helper to get active credentials
 function getAdminUsername() {
@@ -20,7 +23,72 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminModal();
   initFormUploadHandlers();
   initChangePasswordHandler();
+  initGoogleAuth();
 });
+
+function initGoogleAuth() {
+  // Global Google Sign-In callback
+  window.handleGoogleSignInCallback = function(response) {
+    if (!response || !response.credential) {
+      alert('Google Sign-In failed. Please try again.');
+      return;
+    }
+
+    try {
+      const payload = parseJwt(response.credential);
+      const userProfile = {
+        name: payload.name || 'Google User',
+        email: payload.email || '',
+        picture: payload.picture || '',
+        sub: payload.sub
+      };
+
+      // Authenticate session
+      sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
+      sessionStorage.setItem(STORAGE_KEY_GOOGLE_PROFILE, JSON.stringify(userProfile));
+
+      // Close login modal and open Admin Panel
+      const loginOverlay = document.getElementById('admin-login-modal');
+      const adminOverlay = document.getElementById('admin-modal-overlay');
+
+      if (loginOverlay) loginOverlay.classList.remove('active');
+      if (adminOverlay) adminOverlay.classList.add('active');
+
+      renderAdminInventoryTable();
+      updateAdminUserBadge(userProfile);
+      showToast(`Welcome ${userProfile.name}! Signed in via Google.`);
+    } catch (e) {
+      console.error('Failed to parse Google JWT Token', e);
+      alert('Failed to process Google authentication.');
+    }
+  };
+}
+
+// Utility to parse base64 JWT payload from Google Identity SDK
+function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+  return JSON.parse(jsonPayload);
+}
+
+function updateAdminUserBadge(profile) {
+  const badgeContainer = document.getElementById('admin-user-profile-badge');
+  if (!badgeContainer) return;
+
+  if (profile && profile.picture) {
+    badgeContainer.innerHTML = `
+      <img src="${profile.picture}" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--accent-gold);" />
+      <span style="font-size: 0.8rem; color: var(--text-gold);">${profile.name}</span>
+    `;
+  } else if (profile && profile.name) {
+    badgeContainer.innerHTML = `<span style="font-size: 0.8rem; color: var(--text-gold);">👤 ${profile.name}</span>`;
+  } else {
+    badgeContainer.innerHTML = '';
+  }
+}
 
 function initAdminAuth() {
   const btnOpenAdmin = document.getElementById('btn-open-admin');
@@ -35,6 +103,8 @@ function initAdminAuth() {
       if (isAdminAuthenticated()) {
         adminOverlay.classList.add('active');
         renderAdminInventoryTable();
+        const googleProfile = JSON.parse(sessionStorage.getItem(STORAGE_KEY_GOOGLE_PROFILE) || '{}');
+        updateAdminUserBadge(googleProfile);
       } else {
         loginOverlay.classList.add('active');
       }
@@ -66,6 +136,7 @@ function initAdminAuth() {
 
       if (user === activeUser && pass === activePass) {
         sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
+        sessionStorage.removeItem(STORAGE_KEY_GOOGLE_PROFILE);
         loginOverlay.classList.remove('active');
         adminOverlay.classList.add('active');
         renderAdminInventoryTable();
@@ -80,6 +151,7 @@ function initAdminAuth() {
   if (btnLogoutAdmin) {
     btnLogoutAdmin.addEventListener('click', () => {
       sessionStorage.removeItem(STORAGE_KEY_ADMIN_AUTH);
+      sessionStorage.removeItem(STORAGE_KEY_GOOGLE_PROFILE);
       adminOverlay.classList.remove('active');
       showToast('Logged out of Admin Control Panel.');
     });
@@ -98,14 +170,12 @@ function initChangePasswordHandler() {
   const changePassForm = document.getElementById('admin-change-pass-form');
   const loginOverlay = document.getElementById('admin-login-modal');
 
-  // Triggered from Admin Panel Header
   if (btnOpenChangePass && changePassOverlay) {
     btnOpenChangePass.addEventListener('click', () => {
       changePassOverlay.classList.add('active');
     });
   }
 
-  // Triggered directly from Login Screen link
   if (btnLoginChangePass && changePassOverlay && loginOverlay) {
     btnLoginChangePass.addEventListener('click', () => {
       loginOverlay.classList.remove('active');
@@ -138,13 +208,11 @@ function initChangePasswordHandler() {
       const activeUser = getAdminUsername();
       const activePass = getAdminPassword();
 
-      // Verify Username
       if (inputUser !== activeUser) {
         alert('Invalid Admin Username.');
         return;
       }
 
-      // Verify Current Password
       if (currentPass !== activePass) {
         alert('Incorrect Current Password. Please enter your valid current password.');
         return;
@@ -160,7 +228,6 @@ function initChangePasswordHandler() {
         return;
       }
 
-      // Save updated password
       localStorage.setItem(STORAGE_KEY_ADMIN_PASS, newPass);
       changePassForm.reset();
       changePassOverlay.classList.remove('active');

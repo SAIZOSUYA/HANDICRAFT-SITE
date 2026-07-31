@@ -8,6 +8,9 @@
   
   <link rel="stylesheet" href="src/css/style.css">
   <link rel="stylesheet" href="src/css/admin.css">
+
+  <!-- Google Identity Services SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -249,7 +252,7 @@
 
 
   <!-- ==========================================================================
-       ADMIN AUTHENTICATION LOGIN MODAL
+       ADMIN AUTHENTICATION LOGIN MODAL WITH GOOGLE SIGN-IN POPUP
        ========================================================================== -->
   <div class="modal-overlay" id="admin-login-modal">
     <div class="admin-modal-content login-modal-content">
@@ -259,9 +262,27 @@
       </div>
 
       <div class="admin-body" style="gap: 1.25rem;">
-        <p style="font-size: 0.88rem; color: var(--text-secondary);">
-          Please enter your credentials to access the <strong>Barahi Handicraft Admin Control Panel</strong>.
-        </p>
+        <!-- Google Sign-In Popup Button -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+          <div id="g_id_onload"
+               data-client_id="831474336400-de4pm9gpvfhokqa76mkj0kiodm49kjsl.apps.googleusercontent.com"
+               data-callback="handleGoogleSignInCallback"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-shape="rectangular"
+               data-theme="dark"
+               data-text="signin_with"
+               data-size="large"
+               data-logo_alignment="left"
+               data-width="320">
+          </div>
+        </div>
+
+        <div style="text-align: center; font-size: 0.8rem; color: var(--text-muted);">
+          — or login with Admin Credentials —
+        </div>
 
         <form id="admin-login-form">
           <div class="form-group" style="margin-bottom: 1rem;">
@@ -290,7 +311,7 @@
 
 
   <!-- ==========================================================================
-       CHANGE PASSWORD MODAL (Requires Username & Current Password verification)
+       CHANGE PASSWORD MODAL
        ========================================================================== -->
   <div class="modal-overlay" id="admin-change-pass-modal">
     <div class="admin-modal-content login-modal-content">
@@ -351,6 +372,9 @@
         </h3>
 
         <div style="display: flex; align-items: center; gap: 10px;">
+          <!-- User profile avatar/name display -->
+          <div id="admin-user-profile-badge" style="display: flex; align-items: center; gap: 6px;"></div>
+
           <button id="btn-open-change-pass" style="background: rgba(208, 190, 121, 0.15); color: var(--text-gold); border: 1px solid var(--border-gold); padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
             🔑 Change Password
           </button>
