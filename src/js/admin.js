@@ -2,14 +2,24 @@
    BARAHI HANDICRAFT — Admin Authentication & Management Panel
    ========================================================================== */
 
-// Configurable Admin Credentials
-const ADMIN_USERNAME = 'admin';
-const ADMIN_PASSWORD = 'password123';
+const STORAGE_KEY_ADMIN_USER = 'barahi_admin_user';
+const STORAGE_KEY_ADMIN_PASS = 'barahi_admin_pass';
+const STORAGE_KEY_ADMIN_AUTH = 'barahi_admin_auth';
+
+// Helper to get active credentials
+function getAdminUsername() {
+  return localStorage.getItem(STORAGE_KEY_ADMIN_USER) || 'admin';
+}
+
+function getAdminPassword() {
+  return localStorage.getItem(STORAGE_KEY_ADMIN_PASS) || 'password123';
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   initAdminAuth();
   initAdminModal();
   initFormUploadHandlers();
+  initChangePasswordHandler();
 });
 
 function initAdminAuth() {
@@ -51,22 +61,25 @@ function initAdminAuth() {
       const user = document.getElementById('admin-login-user').value.trim();
       const pass = document.getElementById('admin-login-pass').value.trim();
 
-      if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
-        sessionStorage.setItem('barahi_admin_auth', 'true');
+      const activeUser = getAdminUsername();
+      const activePass = getAdminPassword();
+
+      if (user === activeUser && pass === activePass) {
+        sessionStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
         loginOverlay.classList.remove('active');
         adminOverlay.classList.add('active');
         renderAdminInventoryTable();
         showToast('Successfully authenticated as Admin!');
         loginForm.reset();
       } else {
-        alert('Invalid Admin Username or Password. (Default Username: admin, Password: password123)');
+        alert('Invalid Admin Username or Password.');
       }
     });
   }
 
   if (btnLogoutAdmin) {
     btnLogoutAdmin.addEventListener('click', () => {
-      sessionStorage.removeItem('barahi_admin_auth');
+      sessionStorage.removeItem(STORAGE_KEY_ADMIN_AUTH);
       adminOverlay.classList.remove('active');
       showToast('Logged out of Admin Control Panel.');
     });
@@ -74,7 +87,67 @@ function initAdminAuth() {
 }
 
 function isAdminAuthenticated() {
-  return sessionStorage.getItem('barahi_admin_auth') === 'true';
+  return sessionStorage.getItem(STORAGE_KEY_ADMIN_AUTH) === 'true';
+}
+
+function initChangePasswordHandler() {
+  const btnOpenChangePass = document.getElementById('btn-open-change-pass');
+  const changePassOverlay = document.getElementById('admin-change-pass-modal');
+  const btnCloseChangePass = document.getElementById('btn-close-change-pass');
+  const changePassForm = document.getElementById('admin-change-pass-form');
+
+  if (btnOpenChangePass && changePassOverlay) {
+    btnOpenChangePass.addEventListener('click', () => {
+      changePassOverlay.classList.add('active');
+    });
+  }
+
+  if (btnCloseChangePass && changePassOverlay) {
+    btnCloseChangePass.addEventListener('click', () => {
+      changePassOverlay.classList.remove('active');
+    });
+  }
+
+  if (changePassOverlay) {
+    changePassOverlay.addEventListener('click', (e) => {
+      if (e.target === changePassOverlay) {
+        changePassOverlay.classList.remove('active');
+      }
+    });
+  }
+
+  if (changePassForm) {
+    changePassForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const currentPass = document.getElementById('change-curr-pass').value.trim();
+      const newPass = document.getElementById('change-new-pass').value.trim();
+      const confirmPass = document.getElementById('change-confirm-pass').value.trim();
+
+      const activePass = getAdminPassword();
+
+      // Verify Current Password
+      if (currentPass !== activePass) {
+        alert('Incorrect Current Password. Please enter your valid current password.');
+        return;
+      }
+
+      if (newPass.length < 4) {
+        alert('New Password must be at least 4 characters long.');
+        return;
+      }
+
+      if (newPass !== confirmPass) {
+        alert('New Password and Confirm Password do not match.');
+        return;
+      }
+
+      // Save updated password
+      localStorage.setItem(STORAGE_KEY_ADMIN_PASS, newPass);
+      changePassForm.reset();
+      changePassOverlay.classList.remove('active');
+      showToast('Admin Password updated successfully!');
+    });
+  }
 }
 
 function initAdminModal() {
