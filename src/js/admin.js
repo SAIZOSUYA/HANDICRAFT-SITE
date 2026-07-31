@@ -92,12 +92,23 @@ function isAdminAuthenticated() {
 
 function initChangePasswordHandler() {
   const btnOpenChangePass = document.getElementById('btn-open-change-pass');
+  const btnLoginChangePass = document.getElementById('btn-login-change-pass');
   const changePassOverlay = document.getElementById('admin-change-pass-modal');
   const btnCloseChangePass = document.getElementById('btn-close-change-pass');
   const changePassForm = document.getElementById('admin-change-pass-form');
+  const loginOverlay = document.getElementById('admin-login-modal');
 
+  // Triggered from Admin Panel Header
   if (btnOpenChangePass && changePassOverlay) {
     btnOpenChangePass.addEventListener('click', () => {
+      changePassOverlay.classList.add('active');
+    });
+  }
+
+  // Triggered directly from Login Screen link
+  if (btnLoginChangePass && changePassOverlay && loginOverlay) {
+    btnLoginChangePass.addEventListener('click', () => {
+      loginOverlay.classList.remove('active');
       changePassOverlay.classList.add('active');
     });
   }
@@ -119,11 +130,19 @@ function initChangePasswordHandler() {
   if (changePassForm) {
     changePassForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      const inputUser = document.getElementById('change-admin-user').value.trim();
       const currentPass = document.getElementById('change-curr-pass').value.trim();
       const newPass = document.getElementById('change-new-pass').value.trim();
       const confirmPass = document.getElementById('change-confirm-pass').value.trim();
 
+      const activeUser = getAdminUsername();
       const activePass = getAdminPassword();
+
+      // Verify Username
+      if (inputUser !== activeUser) {
+        alert('Invalid Admin Username.');
+        return;
+      }
 
       // Verify Current Password
       if (currentPass !== activePass) {
@@ -145,7 +164,7 @@ function initChangePasswordHandler() {
       localStorage.setItem(STORAGE_KEY_ADMIN_PASS, newPass);
       changePassForm.reset();
       changePassOverlay.classList.remove('active');
-      showToast('Admin Password updated successfully!');
+      showToast('Admin Password updated! You can now log in with your new password.');
     });
   }
 }

@@ -249,7 +249,7 @@
 
 
   <!-- ==========================================================================
-       ADMIN AUTHENTICATION LOGIN MODAL (No public hint notes)
+       ADMIN AUTHENTICATION LOGIN MODAL
        ========================================================================== -->
   <div class="modal-overlay" id="admin-login-modal">
     <div class="admin-modal-content login-modal-content">
@@ -269,22 +269,28 @@
             <input type="text" id="admin-login-user" class="form-control" placeholder="Enter username" required>
           </div>
 
-          <div class="form-group" style="margin-bottom: 1.5rem;">
+          <div class="form-group" style="margin-bottom: 1.25rem;">
             <label>Admin Password *</label>
             <input type="password" id="admin-login-pass" class="form-control" placeholder="Enter password" required>
           </div>
 
-          <button type="submit" class="btn-primary" style="width: 100%;">
+          <button type="submit" class="btn-primary" style="width: 100%; margin-bottom: 1rem;">
             🔑 Unlock Admin Panel
           </button>
         </form>
+
+        <div style="text-align: center; border-top: 1px solid var(--border-light); padding-top: 12px;">
+          <button id="btn-login-change-pass" style="background: transparent; color: var(--accent-teak); border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+            🔑 Forgot / Change Password?
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
 
   <!-- ==========================================================================
-       CHANGE PASSWORD MODAL (Requires Current Password verification)
+       CHANGE PASSWORD MODAL (Requires Username & Current Password verification)
        ========================================================================== -->
   <div class="modal-overlay" id="admin-change-pass-modal">
     <div class="admin-modal-content login-modal-content">
@@ -295,10 +301,15 @@
 
       <div class="admin-body" style="gap: 1rem;">
         <p style="font-size: 0.85rem; color: var(--text-secondary);">
-          You must enter your <strong>Current Password</strong> to set a new password.
+          Verify your <strong>Admin Username</strong> and <strong>Current Password</strong> to set a new password.
         </p>
 
         <form id="admin-change-pass-form">
+          <div class="form-group">
+            <label>Admin Username *</label>
+            <input type="text" id="change-admin-user" class="form-control" placeholder="Enter username" required>
+          </div>
+
           <div class="form-group">
             <label>Current Password *</label>
             <input type="password" id="change-curr-pass" class="form-control" placeholder="Enter current password" required>
@@ -315,7 +326,7 @@
           </div>
 
           <button type="submit" class="btn-primary" style="width: 100%;">
-            💾 Update Password
+            💾 Save & Update Password
           </button>
         </form>
       </div>
